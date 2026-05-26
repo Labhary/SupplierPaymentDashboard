@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual env
+.venv/
+venv/
+
+# Build
+build/
+dist/
+
+# PyInstaller
+*.spec
+
+# Tests/cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated exports
+*.html
+*.pdf
+*.xlsx
+
+# Logs
+*.log
