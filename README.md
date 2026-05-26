@@ -1,156 +1,314 @@
-# Dashboard de prévision des décaissements fournisseurs
+# Supplier Payment Dashboard
 
-Application locale Streamlit pour visualiser les paiements fournisseurs prévisionnels à partir d'un fichier Excel.
+Application locale de pilotage des décaissements fournisseurs construite avec Streamlit.
 
-## Objectif
+Le projet permet d’analyser des prévisions de paiements fournisseurs à partir de fichiers Excel, avec :
+- visualisation exécutive ;
+- KPI financiers ;
+- analyse par fournisseur, projet et mois ;
+- exports Excel/PDF ;
+- rapport HTML interactif offline destiné aux managers ;
+- packaging Windows portable sans installation Python.
 
-Ce projet aide à analyser les décaissements fournisseurs prévus par mois: montants à payer, échéances, retards, fournisseurs principaux et répartition par projet ou code affaire.
+---
 
-Ce n'est pas encore une plateforme complète de prévision de trésorerie. Le périmètre actuel couvre uniquement les factures fournisseurs et les comptes à payer. Une vision de trésorerie complète nécessiterait aussi les soldes bancaires, les encaissements clients, les statuts de paiement et des scénarios.
+# Fonctionnalités principales
 
-## Installation
+## Analyse financière
+
+- Prévision mensuelle des décaissements fournisseurs.
+- Analyse des montants à payer.
+- Répartition par fournisseur.
+- Répartition par projet / code affaire.
+- Suivi des échéances fournisseurs.
+- KPI exécutifs dynamiques.
+
+## Dashboard interactif
+
+- Interface Streamlit locale.
+- Thème sombre orienté reporting exécutif.
+- Filtres dynamiques :
+  - fournisseur ;
+  - projet ;
+  - mois ;
+  - montant minimum.
+- Graphiques interactifs Plotly.
+- Table détaillée des factures.
+- Top fournisseurs.
+- Prévision mensuelle cumulée.
+
+## Exports manager
+
+Le projet inclut un centre d’export manager permettant de générer :
+
+- Excel BI-ready ;
+- PDF synthèse exécutive ;
+- PDF visualisations ;
+- PDF rapport complet ;
+- rapport HTML interactif offline.
+
+## Rapport HTML interactif offline
+
+Le rapport HTML exporté :
+
+- fonctionne sans internet ;
+- ne nécessite ni Python ni Streamlit ;
+- s’ouvre directement dans un navigateur ;
+- contient :
+  - KPI ;
+  - graphiques ;
+  - filtres ;
+  - recherche ;
+  - pagination ;
+  - détails fournisseurs ;
+  - export CSV local.
+
+Le manager peut interagir avec les données exportées sans accès à la plateforme analyste.
+
+---
+
+# Architecture générale
+
+## Plateforme analyste
+
+Technologies principales :
+
+- Python
+- Streamlit
+- Pandas
+- Plotly
+- OpenPyXL
+- ReportLab
+- Matplotlib
+
+## Livraison manager
+
+Exports autonomes :
+
+- HTML offline interactif ;
+- PDF ;
+- Excel BI-ready.
+
+## Packaging Windows
+
+Le projet peut être distribué comme application Windows portable via PyInstaller.
+
+---
+
+# Installation
+
+## Cloner le projet
+
+```bash
+git clone https://github.com/Labhary/SupplierPaymentDashboard.git
+cd SupplierPaymentDashboard
+```
+
+## Installer les dépendances
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Lancement
+---
+
+# Lancement
 
 ```bash
 streamlit run app.py
 ```
 
-L'application s'ouvre ensuite dans le navigateur local.
+L’application s’ouvre ensuite automatiquement dans le navigateur local.
 
-## Tests
+---
+
+# Tests
 
 ```bash
 python -m pytest
 ```
 
-Les tests couvrent le nettoyage des montants, les dates Excel, les dates texte, les colonnes manquantes, les agrégations mensuelles, les KPI et les filtres.
+Les tests couvrent notamment :
 
-## Générer un fichier Excel d'exemple
+- nettoyage des montants ;
+- parsing des dates Excel ;
+- formats français ;
+- agrégations mensuelles ;
+- exports ;
+- rapport HTML interactif ;
+- compatibilité des filtres ;
+- absence de dépendances externes ;
+- régressions JavaScript.
+
+---
+
+# Structure Excel attendue
+
+## Feuil1 — Factures fournisseurs
+
+Colonnes attendues :
+
+- Nom du fournisseur
+- Numéro réf. fournisseur
+- Date d'échéance
+- Montant
+- Date comptable
+- Code Affaire
+- Nom Projet
+- MOIS
+
+## Feuil2 — Synthèse mensuelle (optionnelle)
+
+Colonnes possibles :
+
+- mois
+- dépenses prévisionnelles
+- dépenses réelles
+- ecarts
+- Retard en jours
+- Montant de pénalité
+
+---
+
+# Tolérance des données Excel
+
+L’application gère automatiquement :
+
+- dates Excel sérialisées ;
+- dates texte françaises ;
+- dates ISO ;
+- variations d’accents ;
+- espaces supplémentaires ;
+- différences majuscules/minuscules ;
+- lignes d’en-tête décalées ;
+- valeurs manquantes ;
+- formats numériques hétérogènes.
+
+---
+
+# Générer un fichier d’exemple
 
 ```bash
 python scripts/create_sample_excel.py
 ```
 
-Le script crée `sample_supplier_payments.xlsx` à la racine du projet avec deux feuilles:
+Le script génère :
 
-- `Feuil1`: factures fournisseurs réalistes.
-- `Feuil2`: synthèse mensuelle.
+```text
+sample_supplier_payments.xlsx
+```
 
-## Format Excel attendu
+avec :
+- Feuil1 ;
+- Feuil2 ;
+- données réalistes de démonstration.
 
-Le fichier doit contenir:
+---
 
-- `Feuil1`: base des factures fournisseurs.
-- `Feuil2`: synthèse mensuelle, optionnelle mais prise en charge.
+# Packaging Windows portable
 
-Colonnes attendues dans `Feuil1`:
+Le projet peut être transformé en application Windows autonome.
 
-- Nom du fournisseur
-- Retard en jours
-- Numéro réf. fournisseur
-- Date d'échéance
-- Montant
-- Montant d'origine
-- Date comptable
-- Projet partenaire
-- Code Affaire
-- Nom Projet
+L’utilisateur final n’a pas besoin :
+- de Python ;
+- de VS Code ;
+- de Streamlit.
 
-Colonnes attendues dans `Feuil2`:
-
-- mois
-- dépenses prévisionnelles
-- Dépenses réelles
-- ecarts
-- Retard en jours
-- Montant de pénalité
-
-L'application détecte automatiquement la ligne d'en-tête dans `Feuil1`, même si les données commencent autour de `B2:K1328`.
-
-## Problèmes fréquents de colonnes Excel
-
-L'application tolère plusieurs variations courantes:
-
-- accents présents ou absents;
-- majuscules / minuscules;
-- espaces supplémentaires;
-- retours à la ligne dans les en-têtes;
-- variantes comme `Numéro réf. Fournisseur`, `Numéro réf. fournisseur` ou `Numero ref fournisseur`.
-
-Si une colonne attendue est absente, l'application crée une valeur vide ou `Non renseigné` quand c'est possible, puis affiche un avertissement au lieu de bloquer le tableau de bord.
-
-## Fonctionnalités
-
-- Import d'un fichier Excel.
-- Lecture automatique de `Feuil1` et `Feuil2`.
-- Nettoyage des montants, dates Excel, dates texte et valeurs manquantes.
-- KPI: total à payer, nombre de factures, fournisseurs, mois le plus élevé, montant en retard.
-- Graphiques interactifs Plotly:
-  - décaissements prévisionnels par mois;
-  - cumul des décaissements;
-  - top 10 fournisseurs;
-  - montant par projet / code affaire;
-  - répartition en retard / non en retard.
-- Filtres: fournisseur, projet / code affaire, mois, statut retard et montant minimum.
-- Tables: factures détaillées, synthèse mensuelle et top fournisseurs.
-- Export CSV des factures nettoyées et de la prévision mensuelle.
-
-## Améliorations futures possibles
-
-- Ajouter les soldes bancaires.
-- Ajouter les créances clients.
-- Ajouter un statut payé / non payé.
-- Ajouter des scénarios de paiement.
-- Ajouter un export PDF du rapport.
-
-## Packaging Windows portable
-
-Le projet peut etre transforme en application Windows portable avec PyInstaller. L'utilisateur final n'a pas besoin de VS Code et ne tape pas de commande Streamlit.
-
-### Construire l'application
-
-Depuis le dossier du projet, double-cliquer sur:
+## Construire l’application
 
 ```bat
 build_exe.bat
 ```
 
-Le script:
+Le script :
+- crée un environnement virtuel ;
+- installe les dépendances ;
+- construit l’exécutable PyInstaller.
 
-- cree un environnement virtuel `.venv` si necessaire;
-- installe `requirements.txt`;
-- installe PyInstaller;
-- genere une application en mode one-folder.
-
-### Emplacement du resultat
-
-L'executable est genere ici:
+## Résultat
 
 ```text
-dist\SupplierPaymentDashboard\SupplierPaymentDashboard.exe
+dist\SupplierPaymentDashboard\
 ```
 
-### Lancer l'application packagee
-
-Envoyer le dossier complet:
-
-```text
-dist\SupplierPaymentDashboard
-```
-
-L'utilisateur lance:
+Lancement :
 
 ```text
 SupplierPaymentDashboard.exe
 ```
 
-L'application demarre un serveur local Streamlit et ouvre automatiquement le navigateur sur `localhost`.
+L’application démarre automatiquement sur localhost dans le navigateur.
 
-### Note Windows Defender
+---
 
-Comme l'executable n'est pas signe numeriquement, Windows Defender ou SmartScreen peut afficher un avertissement au premier lancement. C'est normal pour un executable local non signe.
+# Exports disponibles
+
+## Excel BI-ready
+
+Compatible Power BI et outils BI classiques.
+
+## PDF
+
+- synthèse exécutive ;
+- visualisations ;
+- rapport complet.
+
+## HTML interactif
+
+Rapport autonome contenant :
+- KPI ;
+- graphiques ;
+- filtres ;
+- détails fournisseurs ;
+- recherche ;
+- pagination ;
+- export CSV.
+
+---
+
+# Cas d’usage
+
+Le projet est adapté pour :
+
+- équipes finance ;
+- contrôle de gestion ;
+- pilotage fournisseurs ;
+- reporting exécutif ;
+- prévision de décaissements ;
+- analyse projet / affaire.
+
+---
+
+# Limites actuelles
+
+Le périmètre actuel couvre principalement :
+
+- les factures fournisseurs ;
+- les décaissements prévisionnels.
+
+Une plateforme complète de prévision de trésorerie nécessiterait également :
+
+- soldes bancaires ;
+- encaissements clients ;
+- statuts de paiement ;
+- scénarios de trésorerie ;
+- projections multi-sources.
+
+---
+
+# Améliorations futures possibles
+
+- gestion des paiements réalisés ;
+- scénarios de trésorerie ;
+- gestion multi-entités ;
+- authentification utilisateurs ;
+- génération PowerPoint ;
+- base de données ;
+- synchronisation ERP ;
+- API d’import automatique.
+
+---
+
+# Auteur
+
+Projet développé par Labhary.
